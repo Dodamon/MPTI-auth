@@ -1,0 +1,96 @@
+###########테스트를 위해 설정 port : 8081 #############
+server:
+  port: 8000
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://i8a803.p.ssafy.io:3002/mpti_auth?serverTimezone=Asia/Seoul
+    username: root
+    password: ehdrms
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+  redis:
+    host: i8a803.p.ssafy.io
+    port: 6379
+
+  security:
+    oauth2.client:
+      registration:
+        google:
+          clientId: 806496478771-0u0jqsq2ld8tc4h8pumesrm0a2de22l8.apps.googleusercontent.com
+          clientSecret: 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
+          redirectUri: "https://i8a803.p.ssafy.io:8000/oauth2/callback/google"
+          scope:
+            - email
+            - profile
+        naver:
+          clientId: ekzHvEolegbwOF5s4bCK
+          clientSecret: 5dPZ_6i7c4
+          clientAuthenticationMethod: post
+          authorizationGrantType: authorization_code
+          redirectUri: "https://i8a803.p.ssafy.io:8000/oauth2/callback/naver"
+          scope:
+            - nickname
+            - email
+            - profile_image
+          clientName: Naver
+        kakao:
+          clientId: b36b4450a8252d26fcb847fd0270bd23
+          clientSecret: z8TfyulLdcoLVm9Lhv424f8PMw9zJoIC
+          clientAuthenticationMethod: post
+          authorizationGrantType: authorization_code
+          redirectUri: "https://i8a803.p.ssafy.io:8000/oauth2/callback/kakao"
+          scope:
+            - profile_nickname
+            - profile_image
+            - account_email
+          clientName: Kakao
+
+      provider:
+        naver:
+          authorizationUri: https://nid.naver.com/oauth2.0/authorize
+          tokenUri: https://nid.naver.com/oauth2.0/token
+          userInfoUri: https://openapi.naver.com/v1/nid/me
+          userNameAttribute: response
+        kakao:
+          authorizationUri: https://kauth.kakao.com/oauth/authorize
+          tokenUri: https://kauth.kakao.com/oauth/token
+          userInfoUri: https://kapi.kakao.com/v2/user/me
+          userNameAttribute: id
+
+app:
+  auth:
+    tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
+    accessTokenExpirationMsec: 300000 # 5분
+    refreshTokenExpirationMsec: 1800000 # 30분
+    trainerServerUrl: http://trainer:8002/api/auth
+    userServerUrl: http://user:8001/api/auth
+
+  #    tokenExpirationMsec: 1800000 # 30분
+  #    refreshTokenExpirationMsec: 259200000 #3일
+
+  cors:
+    ###########테스트를 위해 설정 port : 8081 #############
+    allowedOrigins: http://localhost:3000,http://localhost:8080
+
+  oauth2:
+    authorizedRedirectUris: http://localhost:3000/oauth2/redirect
+#      - myandroidapp://oauth2/redirect
+#      - myiosapp://oauth2/redirect
+
+logging.level:
+  org.hibernate.SQL: debug
