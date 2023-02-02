@@ -49,10 +49,10 @@ spring:
             - profile_image
           clientName: Naver
         kakao:
-          clientId: b36b4450a8252d26fcb847fd0270bd23
-#          clientId : f75e205928d04633609cec5f8a6c9bd1
-          clientSecret: z8TfyulLdcoLVm9Lhv424f8PMw9zJoIC
-#          clientSecret : 4ixTRzzbkMmpshh87r5EL3FqegefB3BF
+#          clientId: b36b4450a8252d26fcb847fd0270bd23
+          clientId : f75e205928d04633609cec5f8a6c9bd1
+#          clientSecret: z8TfyulLdcoLVm9Lhv424f8PMw9zJoIC
+          clientSecret : 4ixTRzzbkMmpshh87r5EL3FqegefB3BF
           clientAuthenticationMethod: post
           authorizationGrantType: authorization_code
           redirectUri: "https://i8a803.p.ssafy.io/auth/oauth2/callback/kakao"
