@@ -58,7 +58,7 @@ spring:
           redirectUri: "https://i8a803.p.ssafy.io/auth/oauth2/callback/kakao"
           scope:
             - profile_nickname
-            - profile_image
+#            - profile_image
             - account_email
           clientName: Kakao
 
