@@ -94,11 +94,11 @@ public class SecurityConfig {
                 // OAuth2 로그인을 위한 필터
                 .oauth2Login()
                     .authorizationEndpoint()
-                        .baseUri("/auth/oauth2/authorize")
+                        .baseUri("/api/auth/oauth2/authorize")
                         .authorizationRequestRepository(cookieAuthorizationRequestRepository())
                         .and()
                     .redirectionEndpoint()
-                        .baseUri("/auth/oauth2/callback/*")
+                        .baseUri("/api/auth/oauth2/callback/*")
                         .and()
                     .userInfoEndpoint()
                         .userService(customOAuth2UserService)
