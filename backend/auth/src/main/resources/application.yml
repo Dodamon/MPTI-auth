@@ -33,7 +33,7 @@ spring:
         google:
           clientId: 806496478771-0u0jqsq2ld8tc4h8pumesrm0a2de22l8.apps.googleusercontent.com
           clientSecret: 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
-          redirectUri: "https://i8a803.p.ssafy.io:8000/auth/oauth2/callback/google"
+          redirectUri: "https://i8a803.p.ssafy.io/auth/oauth2/callback/google"
           scope:
             - email
             - profile
@@ -42,7 +42,7 @@ spring:
           clientSecret: 5dPZ_6i7c4
           clientAuthenticationMethod: post
           authorizationGrantType: authorization_code
-          redirectUri: "https://i8a803.p.ssafy.io:8000/auth/oauth2/callback/naver"
+          redirectUri: "https://i8a803.p.ssafy.io/auth/oauth2/callback/naver"
           scope:
             - nickname
             - email
@@ -51,7 +51,7 @@ spring:
         kakao:
 #          clientId: b36b4450a8252d26fcb847fd0270bd23
           clientId : f75e205928d04633609cec5f8a6c9bd1
-#          clientSecret: z8TfyulLdcoLVm9Lhv424f8PMw9zJoIC 
+#          clientSecret: z8TfyulLdcoLVm9Lhv424f8PMw9zJoIC
           clientSecret : 4ixTRzzbkMmpshh87r5EL3FqegefB3BF
           clientAuthenticationMethod: post
           authorizationGrantType: authorization_code
@@ -82,11 +82,8 @@ app:
     trainerServerUrl: http://trainer:8002/api/auth
     userServerUrl: http://user:8001/api/auth
 
-  #    tokenExpirationMsec: 1800000 # 30분
-  #    refreshTokenExpirationMsec: 259200000 #3일
 
   cors:
-    ###########테스트를 위해 설정 port : 8081 #############
     allowedOrigins: http://localhost:3000,http://localhost:8080
 
   oauth2:
