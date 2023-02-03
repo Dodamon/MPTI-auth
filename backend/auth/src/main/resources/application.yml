@@ -79,8 +79,8 @@ app:
     tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
     accessTokenExpirationMsec: 300000 # 5분
     refreshTokenExpirationMsec: 1800000 # 30분
-    trainerServerUrl: http://trainer:8002/api/auth
-    userServerUrl: http://user:8001/api/auth
+    trainerServerUrl: https://i8a803.p.ssafy.io/api/trainer/api/auth
+    userServerUrl: https://i8a803.p.ssafy.io/api/user/api/auth
 
   #    tokenExpirationMsec: 1800000 # 30분
   #    refreshTokenExpirationMsec: 259200000 #3일
