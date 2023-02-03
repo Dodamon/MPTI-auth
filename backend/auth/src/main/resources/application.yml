@@ -17,7 +17,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         show_sql: true
@@ -46,7 +46,7 @@ spring:
           scope:
             - nickname
             - email
-            - profile_image
+#            - profile_image
           clientName: Naver
         kakao:
           clientId: b36b4450a8252d26fcb847fd0270bd23

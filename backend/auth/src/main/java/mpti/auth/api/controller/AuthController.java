@@ -33,7 +33,7 @@ import java.util.Optional;
 @CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
