@@ -16,14 +16,11 @@ import javax.validation.constraints.NotBlank;
 public class SocialSignUpRequest {
     @NotBlank
     private String name;
-
     @NotBlank
     @Email
     private String email;
-
     @NotBlank
     private String password;
-
     private String provider;
 
 }
