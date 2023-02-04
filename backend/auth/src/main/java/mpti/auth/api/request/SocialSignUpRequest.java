@@ -23,4 +23,9 @@ public class SocialSignUpRequest {
     private String password;
     private String provider;
 
+
+
+
+    
+
 }
