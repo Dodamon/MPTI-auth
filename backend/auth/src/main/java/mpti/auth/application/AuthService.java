@@ -56,8 +56,8 @@ public class AuthService {
     }
 
     public UserDto getUserByEmail(String email) {
-        UserDto userDto = makeUserRequest(email, TRAINER_SERVER_URL);
 
+        UserDto userDto = makeUserRequest(email, TRAINER_SERVER_URL);
         if(userDto == null) userDto = makeUserRequest(email, USER_SERVER_URL);
         return userDto;
     }

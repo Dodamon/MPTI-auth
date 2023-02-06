@@ -33,7 +33,8 @@ public class UserDto {
 
     private String providerId;
 
-    private Boolean needUpdate = false;
+    private Boolean needUpdate;
+
 
 //    public Long getId() {
 //        return id;

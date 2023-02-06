@@ -45,9 +45,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // 회원이 DB에 있는 지 확인
         UserDto user = authService.getUserByEmail(email);
+        user.setNeedUpdate(false);
+        
         if (user == null) {
             throw new UsernameNotFoundException(email + "not found");
         }
+
+        logger.info(user.toString());
         return UserPrincipal.create(user, USER);
 
     }

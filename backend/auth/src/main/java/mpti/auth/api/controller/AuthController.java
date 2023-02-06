@@ -72,6 +72,8 @@ public class AuthController {
                         loginRequest.getPassword()
                 )
         );
+
+        logger.info("로그인 성공");
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // 토큰 새성
