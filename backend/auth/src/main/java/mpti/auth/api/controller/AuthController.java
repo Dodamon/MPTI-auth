@@ -87,8 +87,10 @@ public class AuthController {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", BEARER + accessToken);
         headers.set("Refresh-token", BEARER + refreshToken);
-
-        return ResponseEntity.ok("login success");
+        
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body("login success");
 
     }
 
