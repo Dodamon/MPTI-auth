@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import mpti.auth.api.request.LoginRequest;
 import mpti.auth.api.response.ApiResponse;
 import mpti.auth.api.response.AuthResponse;
+import mpti.auth.application.AuthService;
+import mpti.auth.application.RedisService;
 import mpti.auth.dao.UserRefreshTokenRepository;
 import mpti.auth.entity.UserRefreshToken;
 import mpti.common.security.TokenProvider;
@@ -46,10 +48,14 @@ public class AuthController {
 
     private final UserRefreshTokenRepository userRefreshTokenRepository;
 
+    private final RedisService redisService;
+
     @Value("${app.auth.accessTokenExpirationMsec}")
     private long ACCESS_TOKEN_EXPIRATION;
     @Value("${app.auth.refreshTokenExpirationMsec}")
     private long REFRESH_TOKEN_EXPIRATION;
+
+    private final String BEARER = "Bearer";
 
     /**
      * 일반로그인
@@ -58,7 +64,7 @@ public class AuthController {
      * @throws Exception
      */
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) throws  Exception{
+    public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest ) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -66,8 +72,6 @@ public class AuthController {
                         loginRequest.getPassword()
                 )
         );
-
-        // 로그인 성공시 시큐리티 세션에 저장
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // 토큰 새성
@@ -75,33 +79,15 @@ public class AuthController {
         String refreshToken = tokenProvider.createRefreshToken(authentication);
 
         // 토큰 redis DB에 저장
-        UserRefreshToken userRefreshToken = new UserRefreshToken(authentication.getName(), refreshToken, authentication.getAuthorities());
-        userRefreshTokenRepository.save(userRefreshToken);
-        Optional<UserRefreshToken> byId = userRefreshTokenRepository.findById(refreshToken);
-        logger.info("[redis] 디비에 저장된 토큰 객체" + byId.get().getUserEmail());
-        userRefreshTokenRepository.delete(userRefreshToken);
-        if (!userRefreshTokenRepository.existsById(refreshToken)) {
-            userRefreshToken = new UserRefreshToken(authentication.getName(), refreshToken, authentication.getAuthorities());
-            logger.info("[일반로그인] 새로 생성한 토큰 " + userRefreshToken);
-            userRefreshTokenRepository.save(userRefreshToken);
-        } else {
-            userRefreshToken.setRefreshToken(refreshToken);
-            logger.info("[일반 로그인] 토큰을 기존의 값 update");
-        }
-        logger.info("[일반 로그인]" + refreshToken + "을 DB에 저장 성공");
-
+        redisService.saveTokens(authentication, refreshToken);
 
         // http 응답 생성
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
-        headers.set("Refresh-token", "Bearer " + refreshToken);
-        Date now = new Date();
-        Date accessTokenExpiryDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION);
-        Date refreshTokenExpiryDate = new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION);
-        logger.info("[일반 로그인] 성공");
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(new AuthResponse(accessTokenExpiryDate.toString(), refreshTokenExpiryDate.toString()));
+        headers.set("Authorization", BEARER + accessToken);
+        headers.set("Refresh-token", BEARER + refreshToken);
+
+        return ResponseEntity.ok("login success");
+
     }
 
     /**
@@ -173,8 +159,6 @@ public class AuthController {
 
         if(userRefreshToken.isPresent()) {
             userRefreshTokenRepository.delete(userRefreshToken.get());
-        } else {
-
         }
         return ResponseEntity.ok(new ApiResponse(true, "로그아웃 성공"));
     }

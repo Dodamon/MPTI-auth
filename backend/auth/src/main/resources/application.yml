@@ -8,20 +8,20 @@ server:
       force: true
 
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://i8a803.p.ssafy.io:3002/mpti_auth?serverTimezone=Asia/Seoul
-    username: root
-    password: ehdrms
-
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://i8a803.p.ssafy.io:3002/mpti_auth?serverTimezone=Asia/Seoul
+#    username: root
+#    password: ehdrms
+#
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    hibernate:
+#      ddl-auto: none
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
 
   redis:
     host: i8a803.p.ssafy.io
@@ -33,7 +33,7 @@ spring:
         google:
           clientId: 806496478771-0u0jqsq2ld8tc4h8pumesrm0a2de22l8.apps.googleusercontent.com
           clientSecret: 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
-          redirectUri: "https://i8a803.p.ssafy.io/api/auth/oauth2/callback/google"
+          redirectUri: "http://localhost:8000/api/auth/oauth2/callback/google"
           scope:
             - email
             - profile
@@ -79,7 +79,8 @@ app:
     tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
     accessTokenExpirationMsec: 300000 # 5분
     refreshTokenExpirationMsec: 1800000 # 30분
-    trainerServerUrl: https://i8a803.p.ssafy.io/api/trainer/api/auth
+#    trainerServerUrl: https://i8a803.p.ssafy.io/api/trainer/api/auth
+    trainerServerUrl: http://localhost/api/trainer/api/auth
     userServerUrl: https://i8a803.p.ssafy.io/api/user/api/auth
 
   cors:

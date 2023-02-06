@@ -13,6 +13,7 @@ import java.util.Collection;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @RedisHash(timeToLive = 1800 ) //Sec
