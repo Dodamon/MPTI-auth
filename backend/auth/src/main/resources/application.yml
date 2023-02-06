@@ -80,6 +80,7 @@ app:
     accessTokenExpirationMsec: 300000 # 5분
     refreshTokenExpirationMsec: 1800000 # 30분
     trainerServerUrl: https://i8a803.p.ssafy.io/api/trainer/api/auth
+    
 #    trainerServerUrl: http://localhost/api/trainer/api/auth
     userServerUrl: https://i8a803.p.ssafy.io/api/user/api/auth
 
