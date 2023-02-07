@@ -109,6 +109,9 @@ public class AuthController {
         String accessToken = tokenProvider.createAccessToken(authentication);
         String refreshToken = tokenProvider.createRefreshToken(authentication);
 
+        // 토큰 redis DB에 저장
+        redisService.saveTokens(authentication, refreshToken);
+
         // http 응답 생성
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", BEARER + accessToken);
