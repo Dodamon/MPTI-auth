@@ -106,8 +106,8 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // 토큰 새성
-        String accessToken = "accessToken";
-        String refreshToken = "refreshToken";
+        String accessToken = tokenProvider.createAccessToken(authentication);
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
 
         // http 응답 생성
         HttpHeaders headers = new HttpHeaders();
