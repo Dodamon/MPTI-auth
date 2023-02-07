@@ -55,7 +55,7 @@ public class AuthController {
     @Value("${app.auth.refreshTokenExpirationMsec}")
     private long REFRESH_TOKEN_EXPIRATION;
 
-    private final String BEARER = "Bearer";
+    private final String BEARER = "Bearer ";
 
     /**
      * 일반로그인
@@ -85,13 +85,29 @@ public class AuthController {
 
         // http 응답 생성
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization ", BEARER + accessToken);
-        headers.set("Refresh-token ", BEARER + refreshToken);
+        headers.set("Authorization", BEARER + accessToken);
+        headers.set("Refresh-token", BEARER + refreshToken);
 
         return ResponseEntity.ok()
                 .headers(headers)
                 .body("login success");
+    }
 
+    @PostMapping("/logintest")
+    public ResponseEntity loginTest(@Valid @RequestBody LoginRequest loginRequest ) {
+
+        // 토큰 새성
+        String accessToken = "accessToken";
+        String refreshToken = "refreshToken";
+
+        // http 응답 생성
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", BEARER + accessToken);
+        headers.set("Refresh-token", BEARER + refreshToken);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body("login success");
     }
 
     /**
