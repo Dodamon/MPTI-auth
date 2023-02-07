@@ -95,6 +95,15 @@ public class AuthController {
 
     @PostMapping("/logintest")
     public ResponseEntity loginTest(@Valid @RequestBody LoginRequest loginRequest ) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        logger.info("로그인 성공");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // 토큰 새성
         String accessToken = "accessToken";
