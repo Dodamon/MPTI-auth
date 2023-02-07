@@ -93,7 +93,7 @@ public class AuthController {
                 .body("login success");
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/signintest")
     public ResponseEntity signin(@Valid @RequestBody LoginRequest loginRequest ) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
