@@ -264,7 +264,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .build();
 
         String json = gson.toJson(socialSignUpRequest);
-        logger.info(json);
         RequestBody requestBody = RequestBody.create(MediaType.get("application/json; charset=utf-8"), json);
         Request request = new Request.Builder()
                 .url(USER_SERVER_URL+"/signup")

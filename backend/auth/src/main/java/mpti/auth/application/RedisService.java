@@ -25,16 +25,14 @@ public class RedisService {
         UserRefreshToken userRefreshToken = new UserRefreshToken(authentication.getName(), refreshToken, authentication.getAuthorities());
         userRefreshTokenRepository.save(userRefreshToken);
 
-        logger.info("[Redis] save tokens in redis DB");
-
         if (!userRefreshTokenRepository.existsById(refreshToken)) {
             userRefreshToken = new UserRefreshToken(authentication.getName(), refreshToken, authentication.getAuthorities());
-            logger.info("[일반로그인] 새로 생성한 토큰 " + userRefreshToken);
             userRefreshTokenRepository.save(userRefreshToken);
         } else {
             userRefreshToken.setRefreshToken(refreshToken);
-            logger.info("[일반 로그인] 토큰을 기존의 값 update");
         }
-        logger.info("[일반 로그인]" + refreshToken + "을 DB에 저장 성공");
+
+        logger.info("[Redis] save tokens in redis DB");
+        logger.info(refreshToken);
     }
 }

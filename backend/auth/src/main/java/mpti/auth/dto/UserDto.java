@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Builder
 @Getter
@@ -34,6 +35,8 @@ public class UserDto {
     private String providerId;
 
     private Boolean needUpdate;
+
+    private LocalDate stopUntil;
 
 
 //    public Long getId() {
