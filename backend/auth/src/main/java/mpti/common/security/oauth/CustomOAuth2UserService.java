@@ -87,11 +87,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if(user != null) {
             logger.info(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()) + "");
             logger.info(user.getProvider());
-//            if(!user.getProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
-//                throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
-//                        user.getProvider() + " account. Please use your " + user.getProvider() +
-//                        " account to login.");
-//            }
+
             // 회원가입을 했던 회왼 -> 바로 user 조회
             user = updateExistingUser(user, oAuth2UserInfo);
             user.setNeedUpdate(false);
@@ -99,118 +95,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             // 회원가입이 처음인 회원 -> 추가 정보 요청 send Redirect
              user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
              user.setNeedUpdate(true);
-//            user = UserDto.builder()
-//                    .id(null)
-//                    .name(oAuth2UserInfo.getName())
-//                    .password(oAuth2UserInfo.getId())
-//                    .email(oAuth2UserInfo.getEmail())
-//                    .provider(oAuth2UserInfo.getProvider())
-//                    .build();
         }
         return UserPrincipal.create(user, oAuth2User.getAttributes());
-//
-//
-//        if(user != null) {
-//            if(!user.getProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
-//                throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
-//                        user.getProvider() + " account. Please use your " + user.getProvider() +
-//                        " account to login.");
-//            }
-//
-//            logger.info(user.getProvider() + "[OAuth 로그인] 소셜 로그인을 이미 한적이 있습니다");
-//            user = updateExistingUser(user, oAuth2UserInfo);
-//        }
-//
-//        UserDto user = processTrainerOAuth2User(oAuth2UserRequest,oAuth2UserInfo);
-//        if(user != null) return UserPrincipal.create(user, oAuth2User.getAttributes());
-//
-//        user = processMemberOAuth2User(oAuth2UserRequest, oAuth2UserInfo);
-//        if(user != null) return UserPrincipal.create(user, oAuth2User.getAttributes());
-//
-//        if(user)
-//
-//        user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
-//        return UserPrincipal.create(user, oAuth2User.getAttributes());
 
     }
 
 
-//
-//    private UserDto processTrainerOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-//        // oAuth2UserRequest 데이터에 대한 후처리 되는 함수
-//        // 함수 종료시 @AuthenticationPrincipal 어노테이션이 생성
-//        logger.info("[OAuth 로그인]트레이너 DB 조회");
-//        LoginRequest loginRequest = new LoginRequest();
-//        loginRequest.setEmail(oAuth2UserInfo.getEmail());
-//        String json = gson.toJson(loginRequest);
-//
-//        RequestBody requestBody = RequestBody.create(MediaType.get("application/json; charset=utf-8"), json);
-//        Request request = new Request.Builder()
-////                .url("http://localhost:8002/api/auth/login")
-//                .url(TRAINER_SERVER_URL + "/login")
-//                .post(requestBody)
-//                .build();
-//
-//        UserDto user = null;
-//        try (Response response = client.newCall(request).execute()) {
-//            if (!response.isSuccessful()){
-//                logger.error("응답에 실패했습니다 == 로그인을 할 수 없습니다");
-//            }else{
-//                String st = response.body().string();
-//                user = gson.fromJson(st, UserDto.class);
-//            }
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        if(user != null) {
-//            if(!user.getProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
-//                throw new OAuth2AuthenticationProcessingException("다른 방식으로 로그인을 시도해주세요");
-//            }
-//            logger.info(user.getProvider() + "[OAuth 로그인] 소셜 로그인을 이미 한적이 있습니다");
-//            user = updateExistingUser(user, oAuth2UserInfo);
-//        }
-//
-//        return user;
-////        return UserPrincipal.create(user, oAuth2User.getAttributes());
-//    }
-//
-//    private UserDto processMemberOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-//
-//        logger.info("[OAuth 로그인] 유저 DB 조회");
-//        LoginRequest loginRequest = new LoginRequest();
-//        loginRequest.setEmail(oAuth2UserInfo.getEmail());
-//        String json = gson.toJson(loginRequest);
-//
-//        RequestBody requestBody = RequestBody.create(MediaType.get("application/json; charset=utf-8"), json);
-//        Request request = new Request.Builder()
-////                .url("http://localhost:8002/api/auth/login")
-//                .url(USER_SERVER_URL + "/login")
-//                .post(requestBody)
-//                .build();
-//
-//        UserDto user = null;
-//        try (Response response = client.newCall(request).execute()) {
-//            if (!response.isSuccessful()){
-//                logger.error("응답에 실패했습니다 == 로그인을 할 수 없습니다");
-//            }else{
-//                String st = response.body().string();
-//                user = gson.fromJson(st, UserDto.class);
-//            }
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        if(user != null) {
-//            if(!user.getProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
-//                throw new OAuth2AuthenticationProcessingException("다른 방식으로 로그인을 시도해주세요");
-//            }
-//            logger.info(user.getProvider() + "[OAuth 로그인] 소셜 로그인을 이미 한적이 있습니다");
-//            user = updateExistingUser(user, oAuth2UserInfo);
-//        }
-//
-//        return user;
-//    }
 
     private UserDto updateExistingUser(UserDto existingUser, OAuth2UserInfo oAuth2UserInfo) {
 
@@ -244,12 +134,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 
     private UserDto registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-//        User user = new User();
-//        user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
-//        user.setProviderId(oAuth2UserInfo.getId());
-//        user.setName(oAuth2UserInfo.getName());
-//        user.setEmail(oAuth2UserInfo.getEmail());
-//        user.setImageUrl(oAuth2UserInfo.getImageUrl());
 
         // 회원만 소셜로그인으로 회원가입이 가능하다
         logger.info("[OAuth 로그인] 회원 회원가입");

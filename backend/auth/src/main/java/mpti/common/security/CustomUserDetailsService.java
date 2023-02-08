@@ -43,8 +43,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        // 회원이 DB에 있는 지 확인
+        // 회원이 User 와 Trainer DB에 있는 지 확인
         UserDto user = authService.getUserByEmail(email);
+        String role = USER;
+        if(user == null) {
+            user = authService.getTrainerByEmail(email);
+            role = TRAINER;
+        }
         user.setNeedUpdate(false);
 
         if (user == null) {
@@ -52,7 +57,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         logger.info(user.toString());
-        return UserPrincipal.create(user, USER);
+        return UserPrincipal.create(user, role);
 
     }
 

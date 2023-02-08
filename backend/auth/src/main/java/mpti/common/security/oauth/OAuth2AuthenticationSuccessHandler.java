@@ -59,7 +59,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        logger.info(userPrincipal.getId() + "");
 
         if(userPrincipal.getNeedUpdate()) {
             // 소설로그인이 처음이라 추가 정보가 필요한 경우

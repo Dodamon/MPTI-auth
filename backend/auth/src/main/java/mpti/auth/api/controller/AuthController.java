@@ -3,8 +3,6 @@ package mpti.auth.api.controller;
 import lombok.RequiredArgsConstructor;
 import mpti.auth.api.request.LoginRequest;
 import mpti.auth.api.response.ApiResponse;
-import mpti.auth.api.response.AuthResponse;
-import mpti.auth.application.AuthService;
 import mpti.auth.application.RedisService;
 import mpti.auth.dao.UserRefreshTokenRepository;
 import mpti.auth.entity.UserRefreshToken;
@@ -66,6 +64,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest ) {
 
+        logger.info("로그인 진입");
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -122,61 +122,60 @@ public class AuthController {
                 .body("login success");
     }
 
-    /**
-     * access 토큰 만료시 재발급
-     * @param request
-     * @param response
-     * @return
-     */
-
-    @GetMapping("/token")
-    public ResponseEntity<?> renewAccessToken(HttpServletRequest request, HttpServletResponse response) {
-
-        String accessToken = "";
-
-        // Refresh 토큰이 만료됐는지 확인
-        try {
-            String refreshToken = tokenProvider.getJwtRefreshFromRequest(request);
-
-            // refresh 토큰이 만료됬을 때
-            if (!StringUtils.hasText(refreshToken) || !tokenProvider.validateToken(refreshToken)) {
-                return ResponseEntity.internalServerError().body(
-                        new ApiResponse(false, "refresh 토큰이 만료 되었습니다"));
-            }
-
-            // refresh 토큰이 유효할때
-            // DB에 그 refresh 토큰이 있는 지 || DB에 있는 userId와 토큰의 유저 아이디가 같은지 확인 ??
-            String userEmail = tokenProvider.getUserEmailFromToken(refreshToken);
-            logger.info(refreshToken + "디비에서 토큰 찾기");
-            Optional<UserRefreshToken> userRefreshToken = userRefreshTokenRepository.findById(refreshToken);
-            if(userRefreshToken.isEmpty() || !userRefreshToken.get().getUserEmail().equals(userEmail)) {
-                return ResponseEntity.internalServerError().body(
-                        new ApiResponse(false, "잘못된 refresh 토큰입니다"));
-            }
-
-            // access 토큰 새로 발급
-            accessToken = tokenProvider.renewAccessToken(userEmail, userRefreshToken.get().getRole());
-
-
-        } catch (Exception ex) {
-            logger.error("security context에서 authentication 객체를 찾을 수 없습니다", ex);
-            return ResponseEntity.internalServerError().body(
-                    new ApiResponse(false, "security context에서 authentication 객체를 찾을 수 없습니다"));
-        }
-
-        // 응답 헤더에 access 토큰, 응답 바디에 만료시간을 저장
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
-
-        Date now = new Date();
-        Date accessTokenExpiryDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION);
-
-        logger.info("[Access 토큰 발급] 성공");
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(new AuthResponse(accessTokenExpiryDate.toString()));
-
-    }
+//    /**
+//     * access 토큰 만료시 재발급
+//     * @param request
+//     * @param response
+//     * @return
+//     */
+//    @GetMapping("/token")
+//    public ResponseEntity<?> renewAccessToken(HttpServletRequest request, HttpServletResponse response) {
+//
+//        String accessToken = "";
+//
+//        // Refresh 토큰이 만료됐는지 확인
+//        try {
+//            String refreshToken = tokenProvider.getJwtRefreshFromRequest(request);
+//
+//            // refresh 토큰이 만료됬을 때
+//            if (!StringUtils.hasText(refreshToken) || !tokenProvider.validateToken(refreshToken)) {
+//                return ResponseEntity.internalServerError().body(
+//                        new ApiResponse(false, "refresh 토큰이 만료 되었습니다"));
+//            }
+//
+//            // refresh 토큰이 유효할때
+//            // DB에 그 refresh 토큰이 있는 지 || DB에 있는 userId와 토큰의 유저 아이디가 같은지 확인 ??
+//            String userEmail = tokenProvider.getUserEmailFromToken(refreshToken);
+//            logger.info(refreshToken + "디비에서 토큰 찾기");
+//            Optional<UserRefreshToken> userRefreshToken = userRefreshTokenRepository.findById(refreshToken);
+//            if(userRefreshToken.isEmpty() || !userRefreshToken.get().getUserEmail().equals(userEmail)) {
+//                return ResponseEntity.internalServerError().body(
+//                        new ApiResponse(false, "잘못된 refresh 토큰입니다"));
+//            }
+//
+//            // access 토큰 새로 발급
+//            accessToken = tokenProvider.renewAccessToken(userEmail, userRefreshToken.get().getRole());
+//
+//
+//        } catch (Exception ex) {
+//            logger.error("security context에서 authentication 객체를 찾을 수 없습니다", ex);
+//            return ResponseEntity.internalServerError().body(
+//                    new ApiResponse(false, "security context에서 authentication 객체를 찾을 수 없습니다"));
+//        }
+//
+//        // 응답 헤더에 access 토큰, 응답 바디에 만료시간을 저장
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Authorization", "Bearer " + accessToken);
+//
+//        Date now = new Date();
+//        Date accessTokenExpiryDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION);
+//
+//        logger.info("[Access 토큰 발급] 성공");
+//        return ResponseEntity.ok()
+//                .headers(headers)
+//                .body(new AuthResponse(accessTokenExpiryDate.toString()));
+//
+//    }
 
     /**
      * 로그아웃
