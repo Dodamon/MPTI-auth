@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import mpti.auth.dao.UserRefreshTokenRepository;
 import mpti.auth.dto.TokenDto;
 import mpti.auth.entity.UserRefreshToken;
+import mpti.common.security.TokenProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,8 @@ public class TokenController {
 
     private final UserRefreshTokenRepository userRefreshTokenRepository;
 
+    private final TokenProvider tokenProvider;
+
     private final Gson gson;
     @GetMapping("")
     public String checkDuplicateId() {
@@ -29,22 +32,28 @@ public class TokenController {
      * @return
      */
 
-    @PostMapping("/token")
-    public ResponseEntity checkRefreshToken(@RequestBody String requestBody) {
-
-        TokenDto tokenDto = gson.fromJson(requestBody, TokenDto.class);
-        String refreshToken = tokenDto.getRefreshToken();
-        System.out.println(refreshToken + "token controller");
-
-        Optional<UserRefreshToken> byId = userRefreshTokenRepository.findById(refreshToken);
-
-        System.out.println(byId.get().getUserEmail());
-        System.out.println(byId.get().getRefreshToken());
-        System.out.println(userRefreshTokenRepository.existsById(refreshToken));
-
-//        Map<String, Boolean> resultResponse = new HashMap<>();
-//        resultResponse.put("result" , userRefreshTokenRepository.existsById(refreshToken));
-        tokenDto.setState(userRefreshTokenRepository.existsById(refreshToken));
-        return ResponseEntity.ok(tokenDto);
-    }
+//    @PostMapping("/token")
+//    public ResponseEntity checkRefreshToken(@RequestBody String requestBody) {
+//
+//        TokenDto tokenDto = gson.fromJson(requestBody, TokenDto.class);
+//        String refreshToken = tokenDto.getRefreshToken();
+//
+//        Optional<UserRefreshToken> byId = userRefreshTokenRepository.findById(refreshToken);
+////        if()
+////        System.out.println(byId.get().getUserEmail());
+////        System.out.println(byId.get().getRefreshToken());
+////        System.out.println(userRefreshTokenRepository.existsById(refreshToken));
+////        tokenProvider.
+//
+////        Map<String, Boolean> resultResponse = new HashMap<>();
+////        resultResponse.put("result" , userRefreshTokenRepository.existsById(refreshToken));
+////        tokenDto.setState(userRefreshTokenRepository.existsById(refreshToken));
+//
+//        if(tokenDto.getState()) {
+//
+//            tokenDto.setAccessToken(tokenProvider.createAccessToken());
+//        }
+//
+//        return ResponseEntity.ok(tokenDto);
+//    }
 }

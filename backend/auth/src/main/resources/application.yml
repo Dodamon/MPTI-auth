@@ -11,7 +11,7 @@ spring:
   redis:
     host: i8a803.p.ssafy.io
     port: 6379
-    password: 'ehdrms'
+    password: ehdrms
 
   security:
     oauth2.client:
