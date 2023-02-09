@@ -87,7 +87,7 @@ app:
     allowedOrigins: http://localhost:3000,http://localhost:8080
 
   oauth2:
-    authorizedRedirectUris: http://localhost:3000/oauth2/redirect
+    authorizedRedirectUris: https://i8a803.p.ssafy.io/oauth2/redirect
 #      - myandroidapp://oauth2/redirect
 #      - myiosapp://oauth2/redirect
 
