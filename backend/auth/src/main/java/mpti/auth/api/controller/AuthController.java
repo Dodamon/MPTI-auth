@@ -7,6 +7,7 @@ import mpti.auth.application.RedisService;
 import mpti.auth.dao.UserRefreshTokenRepository;
 import mpti.auth.entity.UserRefreshToken;
 import mpti.common.security.TokenProvider;
+import mpti.common.security.UserPrincipal;
 import okhttp3.MediaType;
 
 import org.slf4j.Logger;
@@ -83,10 +84,14 @@ public class AuthController {
         // 토큰 redis DB에 저장
         redisService.saveTokens(authentication, refreshToken);
 
+        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+
         // http 응답 생성
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", BEARER + accessToken);
         headers.set("Refresh-token", BEARER + refreshToken);
+        headers.set("Email", principal.getEmail());
+        headers.set("Role", principal.getAuthorities().toString());
 
         return ResponseEntity.ok()
                 .headers(headers)

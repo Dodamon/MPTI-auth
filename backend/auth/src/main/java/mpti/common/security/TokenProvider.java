@@ -54,9 +54,9 @@ public class TokenProvider implements InitializingBean {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         return Jwts.builder()
-                .setSubject(authentication.getName())
-                .setId(userPrincipal.getName())
-                .claim(AUTHORITIES_KEY, authorities)
+                .setSubject(authentication.getName()) // String email
+                .setId(userPrincipal.getName()) // long id
+                .claim(AUTHORITIES_KEY, authorities) // role
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
