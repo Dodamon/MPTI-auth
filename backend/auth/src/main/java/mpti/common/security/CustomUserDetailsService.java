@@ -33,6 +33,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final String USER = "ROLE_USER";
     private final String TRAINER = "ROLE_TRAINER";
 
+    private final String ADMIN = "ROLE_ADMIN";
+
+    private final String ADMIN_EMAIL = "admin123@admin.com";
+
     @Value("${app.auth.trainerServerUrl}")
     private String TRAINER_SERVER_URL;
     @Value("${app.auth.userServerUrl}")
@@ -42,6 +46,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        if(email.equals(ADMIN_EMAIL)) {
+            UserDto admin = UserDto.builder()
+                    .id(12345L)
+                    .name("ADMIN")
+                    .email(ADMIN_EMAIL)
+                    .password("$2a$12$pg1UC8hREv8ijEPGG1UAn.w1SZ3aFjd..P.LIBWT.wZko.jsPQiYW")
+                    .needUpdate(false)
+                    .build();
+
+            return UserPrincipal.create(admin, ADMIN);
+        }
 
         // 회원이 User 와 Trainer DB에 있는 지 확인
         UserDto user = authService.getUserByEmail(email);
