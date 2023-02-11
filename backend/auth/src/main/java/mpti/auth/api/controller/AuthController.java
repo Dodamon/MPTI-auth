@@ -74,6 +74,8 @@ public class AuthController {
                 )
         );
 
+
+
         logger.info("로그인 성공");
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

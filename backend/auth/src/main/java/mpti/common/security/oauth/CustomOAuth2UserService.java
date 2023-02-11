@@ -3,13 +3,12 @@ package mpti.common.security.oauth;
 
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
-import mpti.auth.api.request.LoginRequest;
 import mpti.auth.api.request.SocialSignUpRequest;
 import mpti.auth.application.AuthService;
 import mpti.auth.dto.AuthProvider;
 import mpti.auth.dto.UserDto;
-import mpti.common.exception.OAuth2AuthenticationProcessingException;
-import mpti.common.exception.ResourceNotFoundException;
+import mpti.common.errors.OAuth2AuthenticationProcessingException;
+import mpti.common.errors.ResourceNotFoundException;
 import mpti.common.security.UserPrincipal;
 import mpti.common.security.oauth.provider.OAuth2UserInfo;
 import mpti.common.security.oauth.provider.OAuth2UserInfoFactory;
@@ -25,11 +24,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import mpti.auth.api.request.LoginRequest;
 import mpti.auth.application.AuthService;
+import mpti.common.errors.UserNotFoundException;
 import okhttp3.*;
 
 import mpti.auth.dto.UserDto;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
@@ -45,7 +47,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final AuthService authService;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) {
 
         if(email.equals(ADMIN_EMAIL)) {
             UserDto admin = UserDto.builder()
@@ -66,12 +68,14 @@ public class CustomUserDetailsService implements UserDetailsService {
             user = authService.getTrainerByEmail(email);
             role = TRAINER;
         }
-        user.setNeedUpdate(false);
+        logger.info("DB확인 완료");
 
         if (user == null) {
-            throw new UsernameNotFoundException(email + "not found");
+            logger.error(email + "not found");
+            throw new UserNotFoundException(email + "not found");
         }
 
+        user.setNeedUpdate(false);
         logger.info(user.toString());
         return UserPrincipal.create(user, role);
 

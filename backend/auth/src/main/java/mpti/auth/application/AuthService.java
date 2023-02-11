@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import mpti.auth.api.request.LoginRequest;
 import mpti.auth.dto.UserDto;
-import mpti.common.exception.ResourceNotFoundException;
-import mpti.common.security.UserPrincipal;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

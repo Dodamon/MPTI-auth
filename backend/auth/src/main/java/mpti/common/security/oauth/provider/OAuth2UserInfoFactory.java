@@ -4,7 +4,7 @@ package mpti.common.security.oauth.provider;
 
 
 import mpti.auth.dto.AuthProvider;
-import mpti.common.exception.OAuth2AuthenticationProcessingException;
+import mpti.common.errors.OAuth2AuthenticationProcessingException;
 
 import java.util.Map;
 

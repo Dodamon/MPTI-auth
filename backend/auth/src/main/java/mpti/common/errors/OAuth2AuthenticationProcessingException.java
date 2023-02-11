@@ -1,4 +1,4 @@
-package mpti.common.exception;
+package mpti.common.errors;
 
 import org.springframework.security.core.AuthenticationException;
 
