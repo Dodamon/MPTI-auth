@@ -34,6 +34,6 @@ public class UserDto {
 
     private Boolean needUpdate;
 
-//    private LocalDate stopUntil;
+    private LocalDate stopUntil;
 
 }

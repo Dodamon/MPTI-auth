@@ -57,7 +57,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        if(userPrincipal.getNeedUpdate()) {
+        if(userPrincipal.getAttribute("needUpdate")) {
             // 소설로그인이 처음이라 추가 정보가 필요한 경우
             String targetUrl = makeTargetUrl(request, response, authentication);
             logger.info("[OAuth 로그인] 추가정보로 회원가입 필요 : " +  targetUrl);

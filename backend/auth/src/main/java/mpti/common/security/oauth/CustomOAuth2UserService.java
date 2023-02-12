@@ -9,6 +9,8 @@ import mpti.auth.dto.AuthProvider;
 import mpti.auth.dto.UserDto;
 import mpti.common.errors.OAuth2AuthenticationProcessingException;
 import mpti.common.errors.ResourceNotFoundException;
+//import mpti.common.errors.UserNotFoundException;
+import mpti.common.errors.StopUntilException;
 import mpti.common.security.UserPrincipal;
 import mpti.common.security.oauth.provider.OAuth2UserInfo;
 import mpti.common.security.oauth.provider.OAuth2UserInfoFactory;
@@ -18,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,13 +91,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             // 회원가입을 했던 회왼 -> 바로 user 조회
             user = updateExistingUser(user, oAuth2UserInfo);
             user.setNeedUpdate(false);
+
+            LocalDate stopUntil = user.getStopUntil();
+            if(LocalDate.now().isBefore(stopUntil)) {
+                throw new StopUntilException(stopUntil.toString());
+            }
+
         } else {
             // 회원가입이 처음인 회원 -> 추가 정보 요청 send Redirect
              user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
              user.setNeedUpdate(true);
         }
         return UserPrincipal.create(user, oAuth2User.getAttributes());
-
     }
 
 
@@ -123,7 +132,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         if(user == null) {
-            throw new ResourceNotFoundException("User", "email", existingUser.getEmail());
+//            throw new ResourceNotFoundException("User", "email", existingUser.getEmail());
+            throw new UsernameNotFoundException(existingUser.getEmail() + " not found");
         }
         return user;
     }

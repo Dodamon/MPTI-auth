@@ -6,6 +6,7 @@ import mpti.auth.api.response.ApiResponse;
 import mpti.auth.application.RedisService;
 import mpti.auth.dao.UserRefreshTokenRepository;
 import mpti.auth.entity.UserRefreshToken;
+import mpti.common.errors.StopUntilException;
 import mpti.common.security.TokenProvider;
 import mpti.common.security.UserPrincipal;
 import okhttp3.MediaType;
@@ -15,10 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -66,15 +68,36 @@ public class AuthController {
     public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest ) {
 
         logger.info("로그인 진입");
+        Authentication authentication = null;
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+        try {
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            logger.error(e.getMessage());
+            throw new BadCredentialsException("비밀번호가 맞지 않습니다. 다시 확인해 주세요.");
+        } catch (InternalAuthenticationServiceException e) {
+            logger.error(e.getMessage());
+            throw new InternalAuthenticationServiceException("내부적으로 발생한 시스템 문제로 인해 요청을 처리할 수 없습니다. 관리자에게 문의하세요.");
+        } catch (AuthenticationCredentialsNotFoundException e) {
+            logger.error(e.getMessage());
+            throw new AuthenticationCredentialsNotFoundException("인증 요청이 거부되었습니다. 관리자에게 문의하세요.");
+        } catch (Exception e){
+            logger.error(e.getMessage());
+            throw new RuntimeException("알 수 없는 이유로 로그인에 실패하였습니다 관리자에게 문의하세요.");
+        }
 
+        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
+        // 정지된 회원 또는 트레이너 인지 확인
+        LocalDate stopUntil = principal.getAttribute("stopUntil");
+        if(LocalDate.now().isBefore(stopUntil)) {
+            throw new StopUntilException(stopUntil.toString());
+        }
 
         logger.info("로그인 성공");
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -86,7 +109,6 @@ public class AuthController {
         // 토큰 redis DB에 저장
         redisService.saveTokens(authentication, refreshToken);
 
-        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
         // http 응답 생성
         HttpHeaders headers = new HttpHeaders();

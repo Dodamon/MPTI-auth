@@ -1,10 +1,7 @@
 package mpti.common.security;
 
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
-import mpti.auth.api.request.LoginRequest;
 import mpti.auth.application.AuthService;
-import mpti.common.errors.UserNotFoundException;
 import okhttp3.*;
 
 import mpti.auth.dto.UserDto;
@@ -29,8 +26,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     private OkHttpClient client = new OkHttpClient();
-
-    private final Gson gson;
 
     private final String USER = "ROLE_USER";
     private final String TRAINER = "ROLE_TRAINER";
@@ -62,23 +57,20 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         // 회원이 User 와 Trainer DB에 있는 지 확인
-        UserDto user = authService.getUserByEmail(email);
+        UserDto user = authService.getTrainerByEmail(email);
         String role = USER;
         if(user == null) {
-            user = authService.getTrainerByEmail(email);
+            user = authService.getUserByEmail(email);
             role = TRAINER;
         }
-        logger.info("DB확인 완료");
 
         if (user == null) {
-            logger.error(email + "not found");
-            throw new UserNotFoundException(email + "not found");
+            logger.error(email + " not found");
+            throw new UsernameNotFoundException(email + " not found");
         }
 
         user.setNeedUpdate(false);
-        logger.info(user.toString());
         return UserPrincipal.create(user, role);
-
     }
 
 }

@@ -1,6 +1,5 @@
 package mpti.common.config;
 
-import mpti.common.security.CustomUserDetailsService;
 import mpti.common.security.oauth.CustomOAuth2UserService;
 import mpti.common.security.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import mpti.common.security.oauth.OAuth2AuthenticationFailureHandler;
@@ -26,11 +25,6 @@ import org.springframework.security.web.SecurityFilterChain;
         prePostEnabled = true
 )
 public class SecurityConfig {
-
-
-    
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;

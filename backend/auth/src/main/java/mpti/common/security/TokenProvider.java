@@ -63,31 +63,28 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
-    public String renewAccessToken(String name, String role) {
-
-        List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority(role));
-
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION);
-
-        return Jwts.builder()
-                .setSubject(name)
-                .claim(AUTHORITIES_KEY, authorities)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
-                .compact();
-    }
+//    public String renewAccessToken(String name, String role) {
+//
+//        List<GrantedAuthority> authorities = Collections.
+//                singletonList(new SimpleGrantedAuthority(role));
+//
+//        Date now = new Date();
+//        Date expiryDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION);
+//
+//        return Jwts.builder()
+//                .setSubject(name)
+//                .claim(AUTHORITIES_KEY, authorities)
+//                .setIssuedAt(now)
+//                .setExpiration(expiryDate)
+//                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+//                .compact();
+//    }
 
     public String createRefreshToken(Authentication authentication) {
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-
-        logger.info("authorities :: " + authorities);
-        logger.info("getName" + authentication.getName());
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION);
