@@ -64,8 +64,9 @@ app:
   auth:
     tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
     accessTokenExpirationMsec: 3600000 # 1시간
-#    accessTokenExpirationMsec: 604800000 # 1시간
     refreshTokenExpirationMsec: 604800000 # 7일
+#    accessTokenExpirationMsec: 600000 # 1분
+#    refreshTokenExpirationMsec: 1800000 # 3분
     #    trainerServerUrl: https://i8a803.p.ssafy.io/api/trainer/api/auth
     trainerServerUrl: https://i8a803.p.ssafy.io/api/trainer/api/auth
     userServerUrl: https://i8a803.p.ssafy.io/api/user/api/auth

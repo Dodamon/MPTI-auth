@@ -58,10 +58,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // 회원이 User 와 Trainer DB에 있는 지 확인
         UserDto user = authService.getTrainerByEmail(email);
-        String role = USER;
+        String role = TRAINER;
         if(user == null) {
             user = authService.getUserByEmail(email);
-            role = TRAINER;
+            role = USER;
         }
 
         if (user == null) {
