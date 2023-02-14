@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 
 
 @Service
@@ -51,6 +52,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                     .email(ADMIN_EMAIL)
                     .password("$2a$12$pg1UC8hREv8ijEPGG1UAn.w1SZ3aFjd..P.LIBWT.wZko.jsPQiYW")
                     .needUpdate(false)
+                    .stopUntil(LocalDate.now().minusDays(1))
                     .build();
 
             return UserPrincipal.create(admin, ADMIN);
