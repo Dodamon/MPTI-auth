@@ -19,7 +19,7 @@ spring:
         google:
           clientId: 806496478771-0u0jqsq2ld8tc4h8pumesrm0a2de22l8.apps.googleusercontent.com
           clientSecret: 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
-          redirectUri: "https://i8a803.p.ssafy.io/api/auth/oauth2/callback/google"
+          redirectUri: "http://localhost:8000/api/auth/oauth2/callback/google"
           scope:
             - email
             - profile
@@ -75,8 +75,8 @@ app:
     allowedOrigins: http://localhost:3000,http://localhost:8080
 
   oauth2:
-#    authorizedRedirectUris: https://i8a803.p.ssafy.io/oauth2/redirect
-    authorizedRedirectUris: http://localhost:3000/oauth2/redirect
+    authorizedRedirectUris: https://i8a803.p.ssafy.io/oauth2/redirect
+#    authorizedRedirectUris: http://localhost:3000/oauth2/redirect
 #      - myandroidapp://oauth2/redirect
 #      - myiosapp://oauth2/redirect
 
