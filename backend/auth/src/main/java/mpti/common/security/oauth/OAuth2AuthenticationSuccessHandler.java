@@ -103,13 +103,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .queryParam(REFRESH_TOKEN, refreshToken)
                 .queryParam("need_update", true)
                 .queryParam("email", userPrincipal.getEmail())
-                .queryParam("name", userPrincipal.getUsername())
+                .queryParam("id", userPrincipal.getName())
                 .build().toUriString();
     }
 
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         // redirect url 검증 및 조회
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        
         Optional<String> redirectUri = CookieUtils.getCookie(request, HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
         if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
@@ -135,6 +137,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .queryParam(ACCESS_TOKEN, accessToken)
                 .queryParam(REFRESH_TOKEN, refreshToken)
                 .queryParam("need_update", false)
+                .queryParam("email", userPrincipal.getEmail())
+                .queryParam("id", userPrincipal.getName())
                 .build().toUriString();
     }
 
